@@ -2,72 +2,35 @@ version: '3'
 
 services:
 
-  redis:
+  redis-server:
     build: redis/
     ports:
       - "6379:6379"
     networks:
-      - elk
+      - monit
   
-  rabbitmq:
+  rabbitmq-server:
     build: rabbitmq/
     ports:
       - "15672:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: "brabiller"
-      RABBITMQ_DEFAULT_PASS: "test"
+      RABBITMQ_DEFAULT_USER: "sensu"
+      RABBITMQ_DEFAULT_PASS: "sensu"
+      RABBITMQ_DEFAULT_VHOST: "/sensu"
     networks:
-      - elk
-
-  elasticsearch:
-    build: elasticsearch/
+      - monit
+  sensu:
+    build: sensu-server/
     ports:
-      - "9200:9200"
-      - "9300:9300"
-    volumes:
-      - /space/elasticsearch/data:/usr/share/elasticsearch/data
-      - /space/elasticsearch/backup:/usr/share/elasticsearch/backup
-    environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      - "4567:4567"
+      - "3000:3000"
     networks:
-      - elk
-
-  logstash:
-    build: logstash/
-    ports:
-      - "5043:5043/udp"
-    environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    networks:
-      - elk
+      - monit
     depends_on:
-      - elasticsearch
-
-  kibana:
-    build: kibana/
-    volumes:
-      - ./kibana/config:/usr/share/kibana/config
-    ports:
-      - "5601:5601"
-    networks:
-      - elk
-    depends_on:
-      - elasticsearch
-
-  apache:
-    build: apache/
-    ports:
-      - "80:80"
-    volumes:
-      - ./apache/html:/var/www/html
-    logging:
-      driver: gelf
-      options:
-        gelf-address: "udp://172.17.0.1:5043"
-    networks:
-      - elk
+      - redis-server
+      - rabbitmq-server
 
 networks:
 
-  elk:
+  monit:
     driver: bridge
