@@ -1,1 +1,1 @@
-# docker-sensu
+# A powerful sensu stack

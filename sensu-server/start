@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -ex
+
+/etc/init.d/uchiwa start
+/opt/sensu/bin/sensu-api -d /etc/sensu/conf.d -L DEBUG
+/opt/sensu/bin/sensu-server -d /etc/sensu/conf.d -L DEBUG
