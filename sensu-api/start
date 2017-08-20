@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/opt/sensu/bin/sensu-api -d /etc/sensu/conf.d/ -L DEBUG

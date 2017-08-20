@@ -13,22 +13,40 @@ services:
     build: rabbitmq/
     ports:
       - "15672:15672"
+      - "5672:5672"
     environment:
       RABBITMQ_DEFAULT_USER: "sensu"
       RABBITMQ_DEFAULT_PASS: "sensu"
       RABBITMQ_DEFAULT_VHOST: "/sensu"
     networks:
       - monit
-  sensu:
-    build: sensu-server/
+
+  sensu-api:
+    build: sensu-api/
     ports:
       - "4567:4567"
-      - "3000:3000"
     networks:
       - monit
     depends_on:
       - redis-server
       - rabbitmq-server
+
+  sensu-server:
+    build: sensu-server/
+    networks:
+      - monit
+    depends_on:
+      - redis-server
+      - rabbitmq-server
+  
+  uchiwa:
+    build: sensu-uchiwa/
+    ports:
+      - "3000:3000"
+    networks:
+      - monit
+    depends_on:
+      - sensu-api
 
 networks:
 

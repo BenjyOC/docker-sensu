@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/opt/sensu/bin/sensu-client -d /etc/sensu/conf.d -L DEBUG

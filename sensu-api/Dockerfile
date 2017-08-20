@@ -17,6 +17,6 @@ RUN chmod +x /bin/start
 ### CLEANUP
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#EXPOSE 3000 4567
+EXPOSE 4567
 
 ENTRYPOINT ["/bin/start"]
