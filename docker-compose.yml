@@ -39,6 +39,13 @@ services:
       - redis-server
       - rabbitmq-server
   
+  sensu-client:
+    build: sensu-client/
+    networks:
+      - monit
+    depends_on:
+      - rabbitmq-server
+  
   uchiwa:
     build: sensu-uchiwa/
     ports:

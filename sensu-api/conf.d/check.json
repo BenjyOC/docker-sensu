@@ -5,7 +5,7 @@
 			"subscribers": [
 				"ALL"
 			],
-			"interval": 15
+			"interval": 60
 		}
 	}
 }
